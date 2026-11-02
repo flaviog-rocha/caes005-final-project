@@ -1,0 +1,82 @@
+[
+    {
+        "id": "R01",
+        "text": "Permitir cadastrar, consultar, atualizar e remover registros."
+    },
+    {
+        "id": "R02",
+        "text": "Validar os dados recebidos antes de realizar operações."
+    },
+    {
+        "id": "R03",
+        "text": "Manter um histórico das operações realizadas."
+    },
+    {
+        "id": "R04",
+        "text": "Permitir a execução de operações simultâneas."
+    },
+    {
+        "id": "R05",
+        "text": "Garantir a consistência dos dados durante operações concorrentes."
+    },
+    {
+        "id": "R06",
+        "text": "Permitir que diferentes entidades sejam processadas independentemente."
+    },
+    {
+        "id": "R07",
+        "text": "Detectar encerramentos inesperados de processos."
+    },
+    {
+        "id": "R08",
+        "text": "Recuperar processos após falhas inesperadas."
+    },
+    {
+        "id": "R09",
+        "text": "Persistir os dados para recuperação após reinicializações."
+    },
+    {
+        "id": "R10",
+        "text": "Impedir atualizações parcialmente concluídas."
+    },
+    {
+        "id": "R11",
+        "text": "Executar determinadas operações periodicamente."
+    },
+    {
+        "id": "R12",
+        "text": "Implementar expiração automática de registros."
+    },
+    {
+        "id": "R13",
+        "text": "Diferenciar erros de validação de falhas operacionais."
+    },
+    {
+        "id": "R14",
+        "text": "Implementar novas tentativas após falhas temporárias."
+    },
+    {
+        "id": "R15",
+        "text": "Permitir comunicação entre diferentes processos."
+    },
+    {
+        "id": "R16",
+        "text": "Processar grandes volumes de dados sem carregá-los integralmente na memória."
+    },
+    {
+        "id": "R17",
+        "text": "Impedir que uma mesma operação seja executada mais de uma vez."
+    },
+    {
+        "id": "R18",
+        "text": "Permitir limitar a quantidade de operações simultâneas."
+    },
+    {
+        "id": "R19",
+        "text": "Gerar notificações quando determinadas condições forem atingidas."
+    },
+    {
+        "id": "R20",
+        "text": "Permitir consultar o estado atual das operações em andamento."
+    }
+]
