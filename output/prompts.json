@@ -1,14 +1,17 @@
 [
     {
         "task_id": "TASK-001",
-        "domain": "Biblioteca",
-        "task": "o gerenciamento de empréstimos de livros",
+        "domain": "Arquivos",
+        "task": "o processamento de arquivos CSV",
         "mode": "free",
         "requirements": [
-            "R03"
+            "R04",
+            "R20",
+            "R13",
+            "R15"
         ],
         "resources": [],
-        "prompt": "Você é um engenheiro de software sênior focado em programação funcional. Preciso que você gere um código Elixir que faça o gerenciamento de empréstimos de livros, atendendo somente aos seguintes requisitos:\n\n1. Manter um histórico das operações realizadas.\n\nGere um único arquivo autocontido, prefira recursos da biblioteca padrão do Elixir e não adicione dependências externas. Inclua testes ExUnit que verifiquem os requisitos. Não escreva nada além do código (e comentários do código).",
-        "seed": 4968170
+        "prompt": "Você é um engenheiro de software sênior focado em programação funcional. Preciso que você gere um código Elixir que faça o processamento de arquivos CSV, atendendo somente aos seguintes requisitos:\n\n1. Permitir a execução de operações simultâneas.\n2. Permitir consultar o estado atual das operações em andamento.\n3. Diferenciar erros de validação de falhas operacionais.\n4. Permitir comunicação entre diferentes processos.\n\nGere um único arquivo autocontido, prefira recursos da biblioteca padrão do Elixir e não adicione dependências externas. Inclua testes ExUnit que verifiquem os requisitos. Não escreva nada além do código (e comentários do código).",
+        "seed": 4968173
     }
 ]
