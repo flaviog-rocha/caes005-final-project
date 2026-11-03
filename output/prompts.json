@@ -1,17 +1,14 @@
 [
     {
         "task_id": "TASK-001",
-        "domain": "Cache",
-        "task": "o gerenciamento de um sistema de cache",
+        "domain": "Biblioteca",
+        "task": "o gerenciamento de empréstimos de livros",
         "mode": "free",
         "requirements": [
-            "R17",
-            "R15",
-            "R10",
-            "R14"
+            "R03"
         ],
         "resources": [],
-        "prompt": "Você é um engenheiro de software sênior focado em programação funcional. Preciso que você gere um código Elixir que faça o gerenciamento de um sistema de cache, devendo ter os seguintes requisitos:\n\n1. Impedir que uma mesma operação seja executada mais de uma vez.\n2. Permitir comunicação entre diferentes processos.\n3. Impedir atualizações parcialmente concluídas.\n4. Implementar novas tentativas após falhas temporárias.\n\nO código deve ser funcional e organizado e acompanhado de testes automatizados que verifiquem os requisitos. Não escreva nada além do código (e comentários do código).",
-        "seed": 4968169
+        "prompt": "Você é um engenheiro de software sênior focado em programação funcional. Preciso que você gere um código Elixir que faça o gerenciamento de empréstimos de livros, atendendo somente aos seguintes requisitos:\n\n1. Manter um histórico das operações realizadas.\n\nGere um único arquivo autocontido, prefira recursos da biblioteca padrão do Elixir e não adicione dependências externas. Inclua testes ExUnit que verifiquem os requisitos. Não escreva nada além do código (e comentários do código).",
+        "seed": 4968170
     }
 ]
