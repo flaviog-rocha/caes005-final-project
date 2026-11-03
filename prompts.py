@@ -243,6 +243,12 @@ def main():
     parser.add_argument("--model", default="openai/gpt-4o")
     parser.add_argument("--generate-code", action="store_true")
     parser.add_argument(
+        "--prompt-repetitions",
+        type=int,
+        default=1,
+        help="Quantidade de códigos gerados consecutivamente para cada prompt.",
+    )
+    parser.add_argument(
         "--reuse-prompts",
         action="store_true",
         help="Reutiliza os prompts salvos em output/prompts.json.",
@@ -275,6 +281,8 @@ def main():
         parser.error("--max-requirements deve ser maior ou igual a --min-requirements")
     if args.max_requirements > len(REQUIREMENTS):
         parser.error("--max-requirements excede os requisitos disponíveis")
+    if args.prompt_repetitions <= 0:
+        parser.error("--prompt-repetitions deve ser positivo")
     if not args.file_prefix or Path(args.file_prefix).name != args.file_prefix:
         parser.error("--file-prefix deve conter apenas o nome do prefixo")
 
@@ -298,8 +306,14 @@ def main():
 
     if args.generate_code and OPENROUTER_ENABLED and not args.offline:
         for item in dataset:
-            code = call_model(item["prompt"], args.model)
-            save_generated_code(code, item["prompt"], args.model, args.file_prefix)
+            for _ in range(args.prompt_repetitions):
+                code = call_model(item["prompt"], args.model)
+                save_generated_code(
+                    code,
+                    item["prompt"],
+                    args.model,
+                    args.file_prefix,
+                )
     elif args.generate_code:
         if args.offline:
             print("Modo offline: nenhum código foi solicitado ao OpenRouter.")
