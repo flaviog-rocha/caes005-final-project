@@ -1,7 +1,7 @@
 import os
 
 
-OPENROUTER_ENABLED = False
+OPENROUTER_ENABLED = True
 
 
 def call_model(prompt, model):

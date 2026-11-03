@@ -1,0 +1,77 @@
+[
+    {
+        "id": "T01",
+        "domain": "Estoque",
+        "task": "o gerenciamento de estoque de uma loja"
+    },
+    {
+        "id": "T02",
+        "domain": "E-commerce",
+        "task": "o gerenciamento de pedidos de um e-commerce"
+    },
+    {
+        "id": "T03",
+        "domain": "Reservas",
+        "task": "o gerenciamento de reservas de salas"
+    },
+    {
+        "id": "T04",
+        "domain": "Sensores",
+        "task": "o monitoramento de sensores"
+    },
+    {
+        "id": "T05",
+        "domain": "Arquivos",
+        "task": "o processamento de arquivos CSV"
+    },
+    {
+        "id": "T06",
+        "domain": "Cache",
+        "task": "o gerenciamento de um sistema de cache"
+    },
+    {
+        "id": "T07",
+        "domain": "Filas",
+        "task": "o gerenciamento de uma fila de tarefas"
+    },
+    {
+        "id": "T08",
+        "domain": "Comunicação",
+        "task": "um sistema de troca de mensagens entre usuários"
+    },
+    {
+        "id": "T09",
+        "domain": "Financeiro",
+        "task": "o gerenciamento de transações financeiras"
+    },
+    {
+        "id": "T10",
+        "domain": "Usuários",
+        "task": "o gerenciamento de usuários e sessões"
+    },
+    {
+        "id": "T11",
+        "domain": "Biblioteca",
+        "task": "o gerenciamento de empréstimos de livros"
+    },
+    {
+        "id": "T12",
+        "domain": "Entrega",
+        "task": "o gerenciamento de entregas e rastreamento"
+    },
+    {
+        "id": "T13",
+        "domain": "Agendamento",
+        "task": "um sistema de agendamento de compromissos"
+    },
+    {
+        "id": "T14",
+        "domain": "Votação",
+        "task": "um sistema de votação online"
+    },
+    {
+        "id": "T15",
+        "domain": "Notificações",
+        "task": "um sistema de gerenciamento de notificações"
+    }
+]

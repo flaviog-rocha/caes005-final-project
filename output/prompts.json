@@ -1,0 +1,18 @@
+[
+    {
+        "task_id": "TASK-001",
+        "domain": "Cache",
+        "task": "o gerenciamento de um sistema de cache",
+        "mode": "free",
+        "requirements": [
+            "R20",
+            "R19",
+            "R09",
+            "R02",
+            "R05"
+        ],
+        "resources": [],
+        "prompt": "Você é um engenheiro de software sênior focado em programação funcional. Preciso que você gere um código Elixir que faça o gerenciamento de um sistema de cache, devendo ter os seguintes requisitos:\n\n1. Permitir consultar o estado atual das operações em andamento.\n2. Gerar notificações quando determinadas condições forem atingidas.\n3. Persistir os dados para recuperação após reinicializações.\n4. Validar os dados recebidos antes de realizar operações.\n5. Garantir a consistência dos dados durante operações concorrentes.\n\nO código deve ser funcional e organizado. Inclua alguma função que permita a saída e/ou entrada de valoresNo início do código, coloque um comentário com exatamente esse prompt, não mostrando este trecho final (a partir de 'No início'). Não faça nada além do que foi solicitado.",
+        "seed": 4968167
+    }
+]
