@@ -127,6 +127,38 @@ def save_dataset(dataset):
     print(f"Arquivo: {output_file}")
 
 
+def load_saved_dataset(prompt_file):
+    """Carrega prompts salvos para reutilização em uma nova execução."""
+    try:
+        dataset = json.loads(prompt_file.read_text(encoding="utf-8-sig"))
+    except FileNotFoundError as error:
+        raise ValueError(
+            f"Arquivo de prompts não encontrado: {prompt_file}"
+        ) from error
+    except json.JSONDecodeError as error:
+        raise ValueError(
+            f"Arquivo de prompts inválido: {prompt_file}"
+        ) from error
+
+    if not isinstance(dataset, list) or not dataset:
+        raise ValueError(
+            f"Arquivo de prompts deve conter uma lista não vazia: {prompt_file}"
+        )
+
+    invalid_items = [
+        index + 1
+        for index, item in enumerate(dataset)
+        if not isinstance(item, dict) or not isinstance(item.get("prompt"), str)
+    ]
+    if invalid_items:
+        raise ValueError(
+            "Os seguintes itens não possuem um campo 'prompt' válido: "
+            + ", ".join(map(str, invalid_items))
+        )
+
+    return dataset
+
+
 def model_directory(model):
     """Converte o nome do modelo em um nome de pasta seguro e legível."""
     return re.sub(r"[^A-Za-z0-9._-]+", "_", model.replace("/", "_"))
@@ -175,6 +207,17 @@ def main():
     parser.add_argument("--model", default="openai/gpt-4o")
     parser.add_argument("--generate-code", action="store_true")
     parser.add_argument(
+        "--reuse-prompts",
+        action="store_true",
+        help="Reutiliza os prompts salvos em output/prompts.json.",
+    )
+    parser.add_argument(
+        "--prompts-file",
+        type=Path,
+        default=OUTPUT_DIR / "prompts.json",
+        help="Arquivo JSON usado com --reuse-prompts.",
+    )
+    parser.add_argument(
         "--offline",
         action="store_true",
         help="Não chama o OpenRouter nesta execução.",
@@ -193,9 +236,17 @@ def main():
     if not args.file_prefix or Path(args.file_prefix).name != args.file_prefix:
         parser.error("--file-prefix deve conter apenas o nome do prefixo")
 
-    load_data()
-    dataset = generate_dataset(args.count, args.seed, args.mandatory_ratio)
-    save_dataset(dataset)
+    if args.reuse_prompts:
+        try:
+            dataset = load_saved_dataset(args.prompts_file)
+        except ValueError as error:
+            parser.error(str(error))
+        print(f"\n{len(dataset)} prompts reutilizados!")
+        print(f"Arquivo: {args.prompts_file}")
+    else:
+        load_data()
+        dataset = generate_dataset(args.count, args.seed, args.mandatory_ratio)
+        save_dataset(dataset)
 
     if args.generate_code and OPENROUTER_ENABLED and not args.offline:
         for item in dataset:
