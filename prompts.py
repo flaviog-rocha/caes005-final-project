@@ -149,13 +149,16 @@ def add_prompt_comment(code, prompt):
     prompt_comment = "\n".join(
         f"# {line}" if line else "#" for line in prompt.splitlines()
     )
+    prompt_header = f"# Prompt gerado:\n{prompt_comment}\n\n"
     code = code.strip()
     if code.startswith("```"):
         code = re.sub(
             r"^```(?:elixir|ex)?\s*", "", code, count=1, flags=re.IGNORECASE
         )
         code = re.sub(r"\s*```$", "", code)
-    return f"# Prompt gerado:\n{prompt_comment}\n\n{code.strip()}\n"
+    if code.startswith(prompt_header):
+        code = code[len(prompt_header):].lstrip()
+    return f"{prompt_header}{code.strip()}\n"
 
 
 def save_generated_code(code, prompt, model, prefix=CODE_FILE_PREFIX):
