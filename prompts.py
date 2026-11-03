@@ -14,6 +14,9 @@ OUTPUT_DIR = BASE_DIR / "output"
 # Altere esta variável para mudar o padrão dos arquivos gerados.
 CODE_FILE_PREFIX = "code_"
 CODE_FILE_EXTENSION = ".ex"
+MIN_REQUIREMENTS = 1
+MAX_REQUIREMENTS = 3
+MAX_MANDATORY_RESOURCES = 1
 
 TASKS = [
     {"id": "T01", "domain": "Estoque", "task": "o gerenciamento de estoque de uma loja"},
@@ -79,30 +82,47 @@ def generate_prompt(task, requirements, mode):
     prompt = (
         f"Você é um engenheiro de software sênior focado em programação funcional. "
         f"Preciso que você gere um código Elixir que faça {task['task']}, "
-        f"devendo ter os seguintes requisitos:\n\n{requirements_text}\n\n"
+        f"atendendo somente aos seguintes requisitos:\n\n{requirements_text}\n\n"
     )
     resources = []
     if mode == "mandatory":
-        resources = random.sample(ELIXIR_RESOURCES, 2)
+        resources = random.sample(ELIXIR_RESOURCES, MAX_MANDATORY_RESOURCES)
         prompt += (
             "A implementação deve utilizar os seguintes recursos do Elixir:\n"
             + "\n".join(f"- {resource}" for resource in resources)
             + "\n\n"
         )
     prompt += (
-        "O código deve ser funcional e organizado e acompanhado de testes "
-        "automatizados que verifiquem os requisitos."
+        "Gere um único arquivo autocontido, prefira recursos da biblioteca "
+        "padrão do Elixir e não adicione dependências externas. "
+        "Inclua testes ExUnit que verifiquem os requisitos."
     )
     return prompt, resources
 
 
-def generate_dataset(count=100, seed=42, mandatory_ratio=0.5):
+def generate_dataset(
+    count=100,
+    seed=42,
+    mandatory_ratio=0.5,
+    min_requirements=MIN_REQUIREMENTS,
+    max_requirements=MAX_REQUIREMENTS,
+):
+    if min_requirements < 1:
+        raise ValueError("min_requirements deve ser positivo")
+    if max_requirements < min_requirements:
+        raise ValueError("max_requirements deve ser maior ou igual a min_requirements")
+    if max_requirements > len(REQUIREMENTS):
+        raise ValueError("max_requirements não pode exceder os requisitos disponíveis")
+
     random.seed(seed)
     dataset = []
     mandatory_count = round(count * mandatory_ratio)
     for i in range(count):
         task = random.choice(TASKS)
-        selected_requirements = random.sample(REQUIREMENTS, random.randint(2, 6))
+        selected_requirements = random.sample(
+            REQUIREMENTS,
+            random.randint(min_requirements, max_requirements),
+        )
         mode = "mandatory" if i < mandatory_count else "free"
         prompt, resources = generate_prompt(task, selected_requirements, mode)
         dataset.append({
@@ -126,6 +146,38 @@ def save_dataset(dataset):
     )
     print(f"\n{len(dataset)} prompts gerados!")
     print(f"Arquivo: {output_file}")
+
+
+def load_saved_dataset(prompt_file):
+    """Carrega prompts salvos para reutilização em uma nova execução."""
+    try:
+        dataset = json.loads(prompt_file.read_text(encoding="utf-8-sig"))
+    except FileNotFoundError as error:
+        raise ValueError(
+            f"Arquivo de prompts não encontrado: {prompt_file}"
+        ) from error
+    except json.JSONDecodeError as error:
+        raise ValueError(
+            f"Arquivo de prompts inválido: {prompt_file}"
+        ) from error
+
+    if not isinstance(dataset, list) or not dataset:
+        raise ValueError(
+            f"Arquivo de prompts deve conter uma lista não vazia: {prompt_file}"
+        )
+
+    invalid_items = [
+        index + 1
+        for index, item in enumerate(dataset)
+        if not isinstance(item, dict) or not isinstance(item.get("prompt"), str)
+    ]
+    if invalid_items:
+        raise ValueError(
+            "Os seguintes itens não possuem um campo 'prompt' válido: "
+            + ", ".join(map(str, invalid_items))
+        )
+
+    return dataset
 
 
 def model_directory(model):
@@ -176,8 +228,31 @@ def main():
     parser.add_argument("--count", type=int, default=100)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--mandatory-ratio", type=float, default=0.5)
+    parser.add_argument(
+        "--min-requirements",
+        type=int,
+        default=MIN_REQUIREMENTS,
+        help="Quantidade mínima de requisitos por prompt.",
+    )
+    parser.add_argument(
+        "--max-requirements",
+        type=int,
+        default=MAX_REQUIREMENTS,
+        help="Quantidade máxima de requisitos por prompt.",
+    )
     parser.add_argument("--model", default="openai/gpt-4o")
     parser.add_argument("--generate-code", action="store_true")
+    parser.add_argument(
+        "--reuse-prompts",
+        action="store_true",
+        help="Reutiliza os prompts salvos em output/prompts.json.",
+    )
+    parser.add_argument(
+        "--prompts-file",
+        type=Path,
+        default=OUTPUT_DIR / "prompts.json",
+        help="Arquivo JSON usado com --reuse-prompts.",
+    )
     parser.add_argument(
         "--offline",
         action="store_true",
@@ -194,12 +269,32 @@ def main():
         parser.error("--count deve ser positivo")
     if not 0 <= args.mandatory_ratio <= 1:
         parser.error("--mandatory-ratio deve estar entre 0 e 1")
+    if args.min_requirements < 1:
+        parser.error("--min-requirements deve ser positivo")
+    if args.max_requirements < args.min_requirements:
+        parser.error("--max-requirements deve ser maior ou igual a --min-requirements")
+    if args.max_requirements > len(REQUIREMENTS):
+        parser.error("--max-requirements excede os requisitos disponíveis")
     if not args.file_prefix or Path(args.file_prefix).name != args.file_prefix:
         parser.error("--file-prefix deve conter apenas o nome do prefixo")
 
-    load_data()
-    dataset = generate_dataset(args.count, args.seed, args.mandatory_ratio)
-    save_dataset(dataset)
+    if args.reuse_prompts:
+        try:
+            dataset = load_saved_dataset(args.prompts_file)
+        except ValueError as error:
+            parser.error(str(error))
+        print(f"\n{len(dataset)} prompts reutilizados!")
+        print(f"Arquivo: {args.prompts_file}")
+    else:
+        load_data()
+        dataset = generate_dataset(
+            count=args.count,
+            seed=args.seed,
+            mandatory_ratio=args.mandatory_ratio,
+            min_requirements=args.min_requirements,
+            max_requirements=args.max_requirements,
+        )
+        save_dataset(dataset)
 
     if args.generate_code and OPENROUTER_ENABLED and not args.offline:
         for item in dataset:
