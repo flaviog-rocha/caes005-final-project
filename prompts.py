@@ -94,8 +94,8 @@ def generate_prompt(task, requirements, mode):
         )
     prompt += (
         "Gere um único arquivo autocontido, prefira recursos da biblioteca "
-        "padrão do Elixir e não adicione dependências externas. "
-        "Inclua testes ExUnit que verifiquem os requisitos. Não escreva nada além do código (e comentários do código)."
+        "padrão do Elixir. "
+        "Não escreva nada além do código (e comentários do código)."
     )
     return prompt, resources
 

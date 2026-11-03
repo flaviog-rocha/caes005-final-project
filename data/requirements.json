@@ -78,5 +78,9 @@
     {
         "id": "R20",
         "text": "Permitir consultar o estado atual das operações em andamento."
+    },
+    {
+        "id": "R21",
+        "text": "Fazer uso de macros."
     }
 ]
