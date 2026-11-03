@@ -57,6 +57,15 @@ REQUIREMENTS = [
     {"id": "R18", "text": "Permitir limitar a quantidade de operações simultâneas."},
     {"id": "R19", "text": "Gerar notificações quando determinadas condições forem atingidas."},
     {"id": "R20", "text": "Permitir consultar o estado atual das operações em andamento."},
+    {"id": "R21", "text": "Fazer uso de macros."},
+    {
+        "id": "R22",
+        "text": (
+            "Quando fizer sentido para o domínio, considerar a comunicação com "
+            "um banco de dados fictício e, opcionalmente, o uso de Ecto.Migration, "
+            "sem tornar isso obrigatório."
+        ),
+    },
 ]
 
 ELIXIR_RESOURCES = [
