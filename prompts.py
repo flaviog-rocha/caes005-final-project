@@ -14,8 +14,8 @@ OUTPUT_DIR = BASE_DIR / "output"
 # Altere esta variável para mudar o padrão dos arquivos gerados.
 CODE_FILE_PREFIX = "code_"
 CODE_FILE_EXTENSION = ".ex"
-MIN_REQUIREMENTS = 1
-MAX_REQUIREMENTS = 3
+MIN_REQUIREMENTS = 3
+MAX_REQUIREMENTS = 5
 MAX_MANDATORY_RESOURCES = 1
 
 TASKS = [
