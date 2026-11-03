@@ -36,10 +36,7 @@ def call_model(prompt, model):
                     "role": "system",
                     "content": (
                         "Você é um programador especialista em Elixir. "
-                        "Implemente os requisitos solicitados. "
-                        "Retorne somente o código Elixir, sem repetir o prompt, "
-                        "sem adicionar o cabeçalho 'Prompt gerado' e sem usar "
-                        "blocos Markdown com crases."
+                        "Implemente os requisitos solicitados."
                     ),
                 },
                 {"role": "user", "content": prompt},
