@@ -77,6 +77,7 @@ def generate_prompt(task, requirements, mode):
         f"{i}. {req['text']}" for i, req in enumerate(requirements, start=1)
     )
     prompt = (
+        f"Você é um engenheiro de software sênior focado em programação funcional. "
         f"Preciso que você gere um código Elixir que faça {task['task']}, "
         f"devendo ter os seguintes requisitos:\n\n{requirements_text}\n\n"
     )
@@ -90,7 +91,9 @@ def generate_prompt(task, requirements, mode):
         )
     prompt += (
         "O código deve ser funcional, organizado e acompanhado de testes "
-        "automatizados que verifiquem os requisitos."
+        "automatizados que verifiquem os requisitos. "
+        "No início do código, coloque um comentário com exatamente esse prompt, excluindo apenas "
+        "este trecho final. Não faça nada além do que foi solicitado."
     )
     return prompt, resources
 
