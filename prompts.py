@@ -92,8 +92,6 @@ def generate_prompt(task, requirements, mode):
     prompt += (
         "O código deve ser funcional e organizado e acompanhado de testes "
         "automatizados que verifiquem os requisitos."
-        "No início do código, coloque um comentário com exatamente esse prompt, não mostrando "
-        "este trecho final (a partir de 'No início'). Não faça nada além do que foi solicitado."
     )
     return prompt, resources
 
