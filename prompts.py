@@ -149,6 +149,38 @@ def save_dataset(dataset):
     print(f"Arquivo: {output_file}")
 
 
+def load_saved_dataset(prompt_file):
+    """Carrega prompts salvos para reutilização em uma nova execução."""
+    try:
+        dataset = json.loads(prompt_file.read_text(encoding="utf-8-sig"))
+    except FileNotFoundError as error:
+        raise ValueError(
+            f"Arquivo de prompts não encontrado: {prompt_file}"
+        ) from error
+    except json.JSONDecodeError as error:
+        raise ValueError(
+            f"Arquivo de prompts inválido: {prompt_file}"
+        ) from error
+
+    if not isinstance(dataset, list) or not dataset:
+        raise ValueError(
+            f"Arquivo de prompts deve conter uma lista não vazia: {prompt_file}"
+        )
+
+    invalid_items = [
+        index + 1
+        for index, item in enumerate(dataset)
+        if not isinstance(item, dict) or not isinstance(item.get("prompt"), str)
+    ]
+    if invalid_items:
+        raise ValueError(
+            "Os seguintes itens não possuem um campo 'prompt' válido: "
+            + ", ".join(map(str, invalid_items))
+        )
+
+    return dataset
+
+
 def model_directory(model):
     """Converte o nome do modelo em um nome de pasta seguro e legível."""
     return re.sub(r"[^A-Za-z0-9._-]+", "_", model.replace("/", "_"))
