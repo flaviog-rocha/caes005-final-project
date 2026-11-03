@@ -82,5 +82,9 @@
     {
         "id": "R21",
         "text": "Fazer uso de macros."
+    },
+    {
+        "id": "R22",
+        "text": "Quando fizer sentido para o domínio, considerar a comunicação com um banco de dados fictício e, opcionalmente, o uso de Ecto.Migration, sem tornar isso obrigatório."
     }
 ]
