@@ -81,10 +81,18 @@
     },
     {
         "id": "R21",
-        "text": "Fazer uso de macros."
+        "text": "Quando fizer sentido para o domínio, considerar a comunicação com um banco de dados fictício e, opcionalmente, o uso de Ecto.Migration, sem tornar isso obrigatório."
     },
     {
         "id": "R22",
-        "text": "Quando fizer sentido para o domínio, considerar a comunicação com um banco de dados fictício e, opcionalmente, o uso de Ecto.Migration, sem tornar isso obrigatório."
+        "text": "Faça requisições para rotas de uma API fictícia."
+    },
+    {
+        "id": "R23",
+        "text": "Utilize mais de um módulo na aplicação (no mesmo arquivo)."
+    },
+    {
+        "id": "R24",
+        "text": "Crie uma macro, se fizer sentido para a aplicação."
     }
 ]
