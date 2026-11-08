@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import random
 import re
 from pathlib import Path
@@ -245,9 +246,27 @@ def count_generated_codes(directory, prompt, prefix=CODE_FILE_PREFIX):
 def save_generated_code(code, prompt, model, prefix=CODE_FILE_PREFIX):
     directory = OUTPUT_DIR / model_directory(model)
     directory.mkdir(parents=True, exist_ok=True)
-    number = next_code_number(directory, prefix)
-    output_file = directory / f"{prefix}{number:03d}{CODE_FILE_EXTENSION}"
-    output_file.write_text(add_prompt_comment(code, prompt), encoding="utf-8")
+    content = add_prompt_comment(code, prompt).encode("utf-8")
+
+    while True:
+        number = next_code_number(directory, prefix)
+        output_file = directory / f"{prefix}{number:03d}{CODE_FILE_EXTENSION}"
+        try:
+            file_descriptor = os.open(
+                output_file,
+                os.O_WRONLY | os.O_CREAT | os.O_EXCL,
+            )
+        except FileExistsError:
+            continue
+
+        try:
+            with os.fdopen(file_descriptor, "wb") as file:
+                file.write(content)
+        except Exception:
+            output_file.unlink(missing_ok=True)
+            raise
+        break
+
     print(f"Código salvo em: {output_file}")
     return output_file
 
