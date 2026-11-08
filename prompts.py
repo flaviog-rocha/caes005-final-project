@@ -205,10 +205,7 @@ def next_code_number(directory, prefix=CODE_FILE_PREFIX):
 
 
 def add_prompt_comment(code, prompt):
-    prompt_comment = "\n".join(
-        f"# {line}" if line else "#" for line in prompt.splitlines()
-    )
-    prompt_header = f"# Prompt gerado:\n{prompt_comment}\n\n"
+    prompt_header = prompt_comment_header(prompt)
     code = code.strip()
     if code.startswith("```"):
         code = re.sub(
@@ -218,6 +215,31 @@ def add_prompt_comment(code, prompt):
     if code.startswith(prompt_header):
         code = code[len(prompt_header):].lstrip()
     return f"{prompt_header}{code.strip()}\n"
+
+
+def prompt_comment_header(prompt):
+    prompt_comment = "\n".join(
+        f"# {line}" if line else "#" for line in prompt.splitlines()
+    )
+    return f"# Prompt gerado:\n{prompt_comment}\n\n"
+
+
+def count_generated_codes(directory, prompt, prefix=CODE_FILE_PREFIX):
+    """Conta arquivos já gerados para um prompt específico."""
+    if not directory.exists():
+        return 0
+
+    pattern = re.compile(
+        rf"^{re.escape(prefix)}\d+{re.escape(CODE_FILE_EXTENSION)}$"
+    )
+    header = prompt_comment_header(prompt)
+    return sum(
+        1
+        for path in directory.iterdir()
+        if path.is_file()
+        and pattern.match(path.name)
+        and path.read_text(encoding="utf-8-sig").startswith(header)
+    )
 
 
 def save_generated_code(code, prompt, model, prefix=CODE_FILE_PREFIX):
@@ -263,6 +285,14 @@ def main():
         help="Reutiliza os prompts salvos em output/prompts.json.",
     )
     parser.add_argument(
+        "--resume",
+        action="store_true",
+        help=(
+            "Retoma prompts salvos e gera apenas as repetições ainda não "
+            "concluídas."
+        ),
+    )
+    parser.add_argument(
         "--prompts-file",
         type=Path,
         default=OUTPUT_DIR / "prompts.json",
@@ -295,12 +325,13 @@ def main():
     if not args.file_prefix or Path(args.file_prefix).name != args.file_prefix:
         parser.error("--file-prefix deve conter apenas o nome do prefixo")
 
-    if args.reuse_prompts:
+    if args.resume or args.reuse_prompts:
         try:
             dataset = load_saved_dataset(args.prompts_file)
         except ValueError as error:
             parser.error(str(error))
-        print(f"\n{len(dataset)} prompts reutilizados!")
+        action = "retomados" if args.resume else "reutilizados"
+        print(f"\n{len(dataset)} prompts {action}!")
         print(f"Arquivo: {args.prompts_file}")
     else:
         load_data()
@@ -314,8 +345,24 @@ def main():
         save_dataset(dataset)
 
     if args.generate_code and OPENROUTER_ENABLED and not args.offline:
+        output_directory = OUTPUT_DIR / model_directory(args.model)
         for item in dataset:
-            for _ in range(args.prompt_repetitions):
+            existing_codes = (
+                count_generated_codes(
+                    output_directory,
+                    item["prompt"],
+                    args.file_prefix,
+                )
+                if args.resume
+                else 0
+            )
+            remaining_repetitions = max(
+                args.prompt_repetitions - existing_codes,
+                0,
+            )
+            if args.resume and remaining_repetitions == 0:
+                print(f"{item.get('task_id', 'Prompt')}: já concluído.")
+            for _ in range(remaining_repetitions):
                 code = call_model(item["prompt"], args.model)
                 save_generated_code(
                     code,
