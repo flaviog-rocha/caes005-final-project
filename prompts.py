@@ -299,6 +299,11 @@ def main():
         help="Quantidade de códigos gerados consecutivamente para cada prompt.",
     )
     parser.add_argument(
+        "--prompt-limit",
+        type=int,
+        help="Quantidade máxima de prompts processados nesta execução.",
+    )
+    parser.add_argument(
         "--reuse-prompts",
         action="store_true",
         help="Reutiliza os prompts salvos em output/prompts.json.",
@@ -341,6 +346,8 @@ def main():
         parser.error("--max-requirements excede os requisitos disponíveis")
     if args.prompt_repetitions <= 0:
         parser.error("--prompt-repetitions deve ser positivo")
+    if args.prompt_limit is not None and args.prompt_limit <= 0:
+        parser.error("--prompt-limit deve ser positivo")
     if not args.file_prefix or Path(args.file_prefix).name != args.file_prefix:
         parser.error("--file-prefix deve conter apenas o nome do prefixo")
 
@@ -362,6 +369,10 @@ def main():
             max_requirements=args.max_requirements,
         )
         save_dataset(dataset)
+
+    if args.prompt_limit is not None:
+        dataset = dataset[:args.prompt_limit]
+        print(f"\nLimite aplicado: {len(dataset)} prompts serão processados.")
 
     if args.generate_code and OPENROUTER_ENABLED and not args.offline:
         output_directory = OUTPUT_DIR / model_directory(args.model)
