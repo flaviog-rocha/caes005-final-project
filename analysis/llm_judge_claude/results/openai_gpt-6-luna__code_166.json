@@ -1,0 +1,12 @@
+{
+  "arquivo": "openai_gpt-6-luna code_166",
+  "sintaxe_invalida": true,
+  "smells": {"1": "SEM", "2": "SEM", "3": "COM", "4": "COM", "5": "SEM", "6": "SEM", "7": "SEM", "8": "SEM", "9": "SEM", "10": "SEM", "11": "SEM", "12": "SEM", "13": "SEM", "14": "SEM", "15": "COM", "16": "SEM", "17": "SEM", "18": "SEM", "19": "SEM", "20": "COM", "21": "SEM", "22": "SEM", "23": "SEM", "24": "SEM", "25": "SEM", "26": "SEM", "27": "SEM", "28": "SEM", "29": "COM", "30": "SEM", "31": "SEM", "32": "SEM", "33": "SEM", "34": "SEM", "35": "SEM"},
+  "justificativas": {
+    "3": "TaskQueue.Database.ensure_started/0 inicia o GenServer do banco sob demanda, dentro do init da fila, fora de qualquer árvore de supervisão.",
+    "4": "persist/1 envia via GenServer.cast o mapa inteiro de jobs para o processo Database a cada operação.",
+    "15": "a tarefa :sum soma Map.get(context, :left, 0) e :right sem validar se os valores são números.",
+    "20": "a tarefa :sum usa 0 como padrão silencioso quando faltam os operandos, mascarando entrada incompleta.",
+    "29": "handle_info({:worker_result, ...}) e handle_info({:DOWN, ...}) repetem o mesmo bloco de atualizar o job, put_in, dispatch e persist."
+  }
+}

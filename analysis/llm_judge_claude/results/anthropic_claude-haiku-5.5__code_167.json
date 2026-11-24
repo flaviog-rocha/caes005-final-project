@@ -1,0 +1,6 @@
+{
+  "arquivo": "anthropic_claude-haiku-5.5 code_167",
+  "sintaxe_invalida": false,
+  "smells": {"1": "SEM", "2": "SEM", "3": "SEM", "4": "SEM", "5": "SEM", "6": "SEM", "7": "SEM", "8": "SEM", "9": "SEM", "10": "SEM", "11": "SEM", "12": "COM", "13": "SEM", "14": "SEM", "15": "SEM", "16": "SEM", "17": "SEM", "18": "SEM", "19": "SEM", "20": "SEM", "21": "SEM", "22": "SEM", "23": "SEM", "24": "COM", "25": "SEM", "26": "SEM", "27": "SEM", "28": "SEM", "29": "SEM", "30": "SEM", "31": "SEM", "32": "SEM", "33": "SEM", "34": "SEM", "35": "SEM"},
+  "justificativas": {"12": "Sensor.maybe_fail/0 lê :failure_rate via Application.get_env(:sensor_monitor, ...) em vez de receber a taxa como parâmetro.", "24": "Os módulos SensorMonitor.Store, Sensor e SensorMonitor e funções públicas como put_sensor/2, log/6 e process/1 são documentados só com comentários # em vez de @moduledoc/@doc."}
+}

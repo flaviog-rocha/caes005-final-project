@@ -1,0 +1,9 @@
+{
+  "arquivo": "openai_gpt-6-luna code_131",
+  "sintaxe_invalida": false,
+  "smells": {"1": "SEM", "2": "SEM", "3": "COM", "4": "COM", "5": "SEM", "6": "SEM", "7": "SEM", "8": "SEM", "9": "SEM", "10": "SEM", "11": "SEM", "12": "SEM", "13": "SEM", "14": "SEM", "15": "SEM", "16": "SEM", "17": "SEM", "18": "SEM", "19": "SEM", "20": "SEM", "21": "SEM", "22": "SEM", "23": "SEM", "24": "SEM", "25": "SEM", "26": "SEM", "27": "SEM", "28": "SEM", "29": "SEM", "30": "SEM", "31": "SEM", "32": "SEM", "33": "SEM", "34": "SEM", "35": "SEM"},
+  "justificativas": {
+    "3": "Store.Inventory.init/1 inicia MemoryDB com start_link e logo chama Process.unlink, deixando esse GenServer de longa duração fora de qualquer supervisão.",
+    "4": "execute_cycle/3 envia periodicamente o mapa inteiro de itens ao MemoryDB via sync/2."
+  }
+}
